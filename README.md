@@ -1,21 +1,22 @@
-# Perceptron Simples
+# Rede Neural RAM (WiSARD)
 
 ## O que é
-Implementação do Perceptron Simples para classificação binária,
-treinado para detectar falhas em equipamentos industriais com base
-na leitura de 5 sensores binários.
+Implementação da Rede Neural RAM no modelo WiSARD (Wilkie,
+Stonham and Aleksander's Recognition Device) para classificação
+binária, treinada para detectar falhas em equipamentos industriais
+com base na leitura de 5 sensores binários.
 
 ## Como funciona
-O Perceptron é um modelo de rede neural com uma única camada.
-Ele recebe as entradas, multiplica cada uma pelo seu respectivo
-peso, soma o bias e aplica a função de ativação sinal (sign).
-Durante o treinamento, os pesos são ajustados sempre que o modelo
-erra uma classificação, seguindo a regra:
+A RAM é uma rede neural sem pesos (Weightless Neural Network).
+Em vez de ajustar parâmetros, ela memoriza os padrões de entrada
+durante o treinamento. As entradas binárias são divididas em grupos
+de bits chamados tuplas. Para cada grupo, o endereço formado pelos
+bits é registrado na memória da classe correspondente.
 
-    w = w + η × erro × x
-
-O processo se repete por um número definido de épocas até o modelo
-convergir.
+Na classificação, o modelo consulta as memórias de cada classe e
+conta quantas respondem positivamente ao endereço apresentado.
+Esse total é chamado de score. A classe com o maior score é
+escolhida como a predição final.
 
 ## Pré-requisitos
 - Python 3.x
@@ -29,31 +30,30 @@ Abra o terminal no VS Code e execute:
 
 ## Como executar
 1. Abra a pasta do projeto no VS Code
-2. Abra o arquivo perceptron.py
+2. Abra o arquivo ram.py
 3. Execute o script pelo terminal:
 
-    python perceptron.py
+    python ram.py
 
 O dataset dataset.csv já está incluso na pasta do projeto
 e será carregado automaticamente.
 
 ## Parâmetros
-| Parâmetro | Valor padrão | Descrição                       |
-|-----------|--------------|---------------------------------|
-| lr        | 0.1          | Taxa de aprendizado             |
-| epochs    | 100          | Número de épocas de treinamento |
+| Parâmetro  | Valor padrão | Descrição                        |
+|------------|--------------|----------------------------------|
+| tuple_size | 2            | Quantidade de bits por grupo/RAM |
 
 ## Saída esperada
 ```
 ========================================
-   PERCEPTRON SIMPLES
+   REDE NEURAL RAM (WiSARD)
 ========================================
-  Acurácia         : 100.00%
-  Tempo treinamento: 0.0176s
+  Acurácia         : 50.00%
+  Tempo treinamento: 0.0002s
   Amostras         : 32
-  Features         : 5
-  Taxa aprendizado : 0.1
-  Épocas           : 100
+  Bits de entrada  : 5
+  Tuple size       : 2
+  Nº de grupos/RAMs: 3
 ========================================
 ```
 
@@ -66,3 +66,11 @@ e será carregado automaticamente.
 | sensor_corrente    | binário | Estado do sensor (0/1) |
 | sensor_tensao      | binário | Estado do sensor (0/1) |
 | falha              | binário | 0 = normal, 1 = falha  |
+
+## Observação
+O valor de tuple_size influencia diretamente a acurácia do modelo.
+Com tuple_size = 2 e apenas 5 bits de entrada, o número de
+endereços possíveis por RAM é reduzido, aumentando a chance de
+colisão entre padrões de classes diferentes. Para este dataset,
+tuple_size = 5 resultaria em endereços únicos por amostra,
+eliminando as colisões.
